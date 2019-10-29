@@ -21,7 +21,7 @@ class dns_client (
             match  => '^        addresses',
             notify => Exec['netplan apply'],
           }
-          file_line {'nameservers':
+          file_line {'search':
             ensure => 'present',
             path   => '/etc/netplan/01-netcfg.yaml',
             line   => "        search: [${search}]",
