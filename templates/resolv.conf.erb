@@ -1,0 +1,11 @@
+<% @nameservers.each do |nameserver| -%>
+nameserver <%= nameserver %>
+<% end -%>
+search <% @search %>
+<% if @options != nil -%>
+<% if @options.class == String -%>
+options <%= @options %>
+<% else -%>
+options<% @options.each do |option| %> <%= option %><% end %>
+<% end -%>
+<% end -%>

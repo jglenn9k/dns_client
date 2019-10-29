@@ -1,0 +1,9 @@
+---
+dns_client::servers:
+  - "8.8.8.8"
+  - "8.8.4.4"
+  - "4.2.2.1"
+dns_client::search: "example.com"
+dns_client::options:
+  - "rotate"
+  - "timeout:1"
