@@ -13,8 +13,25 @@ class dns_client (
     'Ubuntu': {
       case $facts['os']['release']['full'] {
         '18.04': {
-          notify { 'Work in progress.':
-            withpath => true,
+          $dns_nameservers = join($nameservers,',')
+          file_line {'nameservers':
+            ensure => 'present',
+            path   => '/etc/netplan/01-netcfg.yaml',
+            line   => "        addresses: [${dns_nameservers}]",
+            match  => '^        addresses',
+            notify => Exec['netplan apply'],
+          }
+          file_line {'nameservers':
+            ensure => 'present',
+            path   => '/etc/netplan/01-netcfg.yaml',
+            line   => "        search: [${search}]",
+            match  => '^        search',
+            notify => Exec['netplan apply'],
+          }
+          exec {'netplan apply':
+            path        => '/usr/sbin',
+            user        => 'root',
+            refreshonly => true,
           }
         }
         default: {
@@ -37,11 +54,13 @@ class dns_client (
             ensure => 'present',
             path   => '/etc/network/interfaces',
             line   => "dns-nameservers ${dns_nameservers}",
+            match  => '^dns-nameservers',
           }
           file_line { 'dns-search':
             ensure => 'present',
             path   => '/etc/network/interfaces',
             line   => "dns-search ${search}",
+            match  => '^dns-search',
           }
         }
       }
